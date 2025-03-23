@@ -1,24 +1,18 @@
 <template>
   <div class="mt-8 overflow-x-auto">
-    <Modal
+    <ModalDeleteReport
+      id="delete"
+      :title="DELETE_MESSAGE_ARE_YOU_SURE_TO_DELETE"
+      :data="deleteRecord"
       view-mode="delete"
-      message="Hi this is delete modal"
-      ref="modalDeleteRef"
     />
-    <Modal
-      view-mode="edit"
-      message="Hi this is edit modal"
-      ref="modalEditRef"
-    />
-    <button
+    <ModalEditReport
       id="edit"
-      class="btn btn-circle btn-text btn-sm"
-      v-on:click="handleEditReport"
-      aria-label="Action button"
-    >
-      <span class="icon-[tabler--pencil] size-5"></span>
-    </button>
-    <table class="table">
+      :title="EDIT_MESSAGE_EDIT"
+      :data="editRecord"
+      view-mode="edit"
+    />
+    <table v-if="!isViewPDF" class="table">
       <!-- head -->
       <thead>
         <tr>
@@ -46,7 +40,9 @@
             </label>
           </th>
           <td>
-            <div class="font-medium">{{ item.reportNumber }}</div>
+            <div v-on:click="viewReport" class="font-medium">
+              {{ item.reportNumber }}
+            </div>
           </td>
           <td>{{ item.studentName }}</td>
           <td>
@@ -62,12 +58,21 @@
           <td>
             <button
               :data-id="item.id"
-              id="delete"
-              v-on:click="handleRemoveReport"
               class="btn btn-circle btn-text btn-sm"
+              data-overlay="#delete"
+              v-on:click="handleRemoveReport"
               aria-label="Action button"
             >
               <span class="icon-[tabler--trash] size-5"></span>
+            </button>
+            <button
+              :data-id="item.id"
+              class="btn btn-circle btn-text btn-sm"
+              data-overlay="#edit"
+              v-on:click="handleEditReport"
+              aria-label="Action button"
+            >
+              <span class="icon-[tabler--pencil] size-5"></span>
             </button>
             <button
               class="btn btn-circle btn-text btn-sm"
@@ -80,35 +85,55 @@
       </tbody>
     </table>
   </div>
+
+  <div v-if="isViewPDF" :style="{ width: '1028px', height: '700px' }">
+    <VuePdfEmbed annotation-layer text-layer :source="doc" />
+    <button v-on:click="togglePdfview">Toggle</button>
+  </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import Modal from "./Modal.vue";
+import ModalEditReport from "./ModalEditReport.vue";
+import ModalDeleteReport from "./ModalDeleteReport.vue";
+import VuePdfEmbed, { useVuePdfEmbed } from "vue-pdf-embed";
+
 const props = defineProps({
   headers: Array,
   data: Array,
 });
-const modalDeleteRef = ref(null);
-const modalEditRef = ref(null);
+const DELETE_MESSAGE_ARE_YOU_SURE_TO_DELETE = "Are you sure to delete?";
+const EDIT_MESSAGE_EDIT = "Edit";
+const deleteRecord = ref({});
+const editRecord = ref({});
+const isViewPDF = ref(false);
+const pdfServerURL = ref("");
 
-function showDeleteModal(singleReport) {
-  modalDeleteRef.value?.openModal(singleReport);
-}
+const { doc } = useVuePdfEmbed({
+  source:
+    "/home/vitouhun/Documents/e-reporting/ere-vue/transaction5130547809973587977.pdf",
+});
 
-function showEditModal(singleReport) {
-  modalEditRef.value?.openModal(singleReport);
+function togglePdfview() {
+  isViewPDF.value = !isViewPDF.value;
 }
 
 function handleEditReport(event) {
   const { id } = event.currentTarget.dataset;
   let singleReport = props.data.find((item) => item.id === id);
-  showEditModal(singleReport);
+  editRecord.value = { ...singleReport };
 }
 
 function handleRemoveReport(event) {
   const { id } = event.currentTarget.dataset;
   let singleReport = props.data.find((item) => item.id === id);
-  showDeleteModal(singleReport);
+  deleteRecord.value = { ...singleReport };
+}
+
+function viewReport(event) {
+  const { id } = event.currentTarget.dataset;
+  pdfServerURL.value =
+    "/home/vitouhun/Documents/e-reporting/ere-vue/transaction5130547809973587977.pdf";
+  isViewPDF.value = true;
 }
 </script>

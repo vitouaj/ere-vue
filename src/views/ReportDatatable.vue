@@ -25,23 +25,23 @@ const headers = [
 
 const data = [
   {
-    id: "guid1",
-    reportNumber: "12312",
-    studentName: "hun vitou",
+    id: "f3a9c7b2-8e41-4b1a-9a67-2e9f834d2345",
+    reportNumber: "98765",
+    studentName: "Sok Dara",
     reportStatus: "feedback received",
     selected: false,
   },
   {
-    id: "guid2",
-    reportNumber: "12312",
-    studentName: "hun vitou",
+    id: "b7e6d4a1-2c3f-4890-a8b5-1d2f567e890a",
+    reportNumber: "54321",
+    studentName: "Chan Sreyneang",
     reportStatus: "draft",
     selected: false,
   },
   {
-    id: "guid3",
-    reportNumber: "12312",
-    studentName: "hun vitou",
+    id: "9c5f2a34-7d61-4e2b-937a-1f8e6d5b9c0d",
+    reportNumber: "11223",
+    studentName: "Kim Vannak",
     reportStatus: "sent",
     selected: false,
   },
