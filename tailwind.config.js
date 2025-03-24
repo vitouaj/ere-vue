@@ -23,6 +23,6 @@ export default {
     addDynamicIconSelectors(),
   ],
   flyonui: {
-    themes: ["light", "dark", "gourmet", "corporate", "luxury", "soft"],
+    themes: ["light"],
   },
 };

@@ -12,6 +12,12 @@
       :data="editRecord"
       view-mode="edit"
     />
+    <ModalViewReport
+      id="view"
+      title="View Record"
+      :data="viewRecord"
+      view-mode="view"
+    />
     <table v-if="!isViewPDF" class="table">
       <!-- head -->
       <thead>
@@ -40,7 +46,12 @@
             </label>
           </th>
           <td>
-            <div v-on:click="viewReport" class="font-medium">
+            <div
+              v-on:click="handleViewRecord"
+              :data-id="item.id"
+              data-overlay="#view"
+              class="font-medium"
+            >
               {{ item.reportNumber }}
             </div>
           </td>
@@ -85,18 +96,16 @@
       </tbody>
     </table>
   </div>
-
-  <div v-if="isViewPDF" :style="{ width: '1028px', height: '700px' }">
-    <VuePdfEmbed annotation-layer text-layer :source="doc" />
-    <button v-on:click="togglePdfview">Toggle</button>
-  </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import ModalEditReport from "./ModalEditReport.vue";
-import ModalDeleteReport from "./ModalDeleteReport.vue";
-import VuePdfEmbed, { useVuePdfEmbed } from "vue-pdf-embed";
+import { onMounted, ref } from "vue";
+import ModalEditReport from "./Modals/ModalEditReport.vue";
+import ModalDeleteReport from "./Modals/ModalDeleteReport.vue";
+import ModalViewReport from "./Modals/ModalViewReport.vue";
+
+const pdfURL =
+  "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf";
 
 const props = defineProps({
   headers: Array,
@@ -106,17 +115,9 @@ const DELETE_MESSAGE_ARE_YOU_SURE_TO_DELETE = "Are you sure to delete?";
 const EDIT_MESSAGE_EDIT = "Edit";
 const deleteRecord = ref({});
 const editRecord = ref({});
+const viewRecord = ref({});
 const isViewPDF = ref(false);
 const pdfServerURL = ref("");
-
-const { doc } = useVuePdfEmbed({
-  source:
-    "/home/vitouhun/Documents/e-reporting/ere-vue/transaction5130547809973587977.pdf",
-});
-
-function togglePdfview() {
-  isViewPDF.value = !isViewPDF.value;
-}
 
 function handleEditReport(event) {
   const { id } = event.currentTarget.dataset;
@@ -130,10 +131,10 @@ function handleRemoveReport(event) {
   deleteRecord.value = { ...singleReport };
 }
 
-function viewReport(event) {
+function handleViewRecord(event) {
   const { id } = event.currentTarget.dataset;
-  pdfServerURL.value =
-    "/home/vitouhun/Documents/e-reporting/ere-vue/transaction5130547809973587977.pdf";
-  isViewPDF.value = true;
+  let singleReport = props.data.find((item) => item.id === id);
+  viewRecord.value = { ...singleReport };
+  pdfServerURL.value = pdfURL;
 }
 </script>
