@@ -17,9 +17,8 @@
         class="link text-base-content link-neutral text-xl font-semibold no-underline"
         href="#"
       >
-        FlyonUI
+        ERE System
       </a>
-      <input type="checkbox" value="dark" class="checkbox theme-controller" />
     </div>
     <div class="navbar-end flex items-center gap-4">
       <div

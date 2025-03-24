@@ -39,38 +39,8 @@ const monthsMap = ref({
 });
 </script>
 <template>
-  <div class="dropdown relative inline-flex">
-    <button
-      id="dropdown-default"
-      type="button"
-      class="dropdown-toggle btn btn-outline btn-secondary font-normal"
-      aria-haspopup="menu"
-      aria-expanded="false"
-      aria-label="Dropdown"
-    >
-      <span class="icon-[tabler--calendar-check]"></span>
-      {{ filterTitle }}
-      <span
-        class="icon-[tabler--chevron-down] dropdown-open:rotate-180 size-4"
-      ></span>
-    </button>
-    <ul
-      class="dropdown-menu dropdown-open:opacity-100 hidden min-w-10"
-      role="menu"
-      aria-orientation="vertical"
-      aria-labelledby="dropdown-default"
-    >
-      <li class="py-2" v-for="month in Object.values(monthsMap)">
-        <span v-if="month.selected" class="icon-[tabler--check] size-5"></span>
-        <a
-          :id="month.index"
-          :aria-selected="month.selected"
-          v-on:click="handleSelectMonth"
-          class="dropdown-item inline"
-          href="javascript:void(0)"
-          >{{ month.name }}</a
-        >
-      </li>
-    </ul>
-  </div>
+  <select class="select join-item w-36" aria-label="select">
+    <option disabled selected>Filter</option>
+    <option v-for="item in Object.values(monthsMap)">{{ item.name }}</option>
+  </select>
 </template>

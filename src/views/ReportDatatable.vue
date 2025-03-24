@@ -46,12 +46,35 @@ const data = [
     selected: false,
   },
 ];
+
+const totalRecords = computed(() => {
+  return data.length;
+});
+
+const currentPage = ref(1);
+const recordPerPage = ref(1); // flexible via user input
+
+const pagginatedRecords = computed(() => {
+  const start = (currentPage.value - 1) * recordPerPage.value;
+  const end = start + recordPerPage.value;
+  return data.slice(start, end);
+});
+
+const handleCurrentPage = (event) => {
+  const newValue = event.detail.currentPage;
+  currentPage.value = parseInt(newValue);
+};
 </script>
 
 <template>
   <div class="w-full">
     <ReportMenuBar />
-    <Datatable :headers="headers" :data="data" />
-    <Paggination />
+    <Datatable :headers="headers" :data="pagginatedRecords" />
+    <Paggination
+      @currentpageselection="handleCurrentPage"
+      :total-records="totalRecords"
+      :current-page="currentPage"
+      :record-per-page="recordPerPage"
+    />
   </div>
 </template>

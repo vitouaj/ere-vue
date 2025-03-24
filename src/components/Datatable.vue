@@ -50,7 +50,7 @@
               v-on:click="handleViewRecord"
               :data-id="item.id"
               data-overlay="#view"
-              class="font-medium"
+              class="font-medium underline cursor-pointer"
             >
               {{ item.reportNumber }}
             </div>
