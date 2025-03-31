@@ -37,7 +37,7 @@
       </thead>
       <tbody>
         <!-- row 1 -->
-        <tr :key="item.id" v-for="item in data">
+        <tr :key="item.reportNumber" v-for="item in data">
           <th>
             <label>
               <input
@@ -85,12 +85,6 @@
             >
               <span class="icon-[tabler--pencil] size-5"></span>
             </button>
-            <button
-              class="btn btn-circle btn-text btn-sm"
-              aria-label="Action button"
-            >
-              <span class="icon-[tabler--dots-vertical] size-5"></span>
-            </button>
           </td>
         </tr>
       </tbody>
@@ -119,6 +113,10 @@ const editRecord = ref({});
 const viewRecord = ref({});
 
 const pdfServerURL = ref("");
+
+onMounted(() => {
+  console.log("data ", JSON.stringify(props.data));
+});
 
 // dom modal ref
 const DELETE_MODAl_DOM = ref(null);
