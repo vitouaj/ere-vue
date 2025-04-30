@@ -15,7 +15,7 @@
     <div class="flex flex-1 items-center">
       <a
         class="link text-base-content link-neutral text-xl font-semibold no-underline"
-        href="#"
+        href="/"
       >
         ERE System
       </a>
@@ -172,10 +172,7 @@
         >
           <div class="avatar">
             <div class="size-9.5 rounded-full">
-              <img
-                src="https://cdn.flyonui.com/fy-assets/avatar/avatar-1.png"
-                alt="avatar 1"
-              />
+              <img src="https://i.pravatar.cc/300" alt="avatar 1" />
             </div>
           </div>
         </button>
@@ -188,10 +185,7 @@
           <li class="dropdown-header gap-2">
             <div class="avatar">
               <div class="w-10 rounded-full">
-                <img
-                  src="https://cdn.flyonui.com/fy-assets/avatar/avatar-1.png"
-                  alt="avatar"
-                />
+                <img src="https://i.pravatar.cc/300" alt="avatar" />
               </div>
             </div>
             <div>
@@ -202,29 +196,12 @@
             </div>
           </li>
           <li>
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" href="/me">
               <span class="icon-[tabler--user]"></span>
               My Profile
             </a>
           </li>
-          <li>
-            <a class="dropdown-item" href="#">
-              <span class="icon-[tabler--settings]"></span>
-              Settings
-            </a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">
-              <span class="icon-[tabler--receipt-rupee]"></span>
-              Billing
-            </a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">
-              <span class="icon-[tabler--help-triangle]"></span>
-              FAQs
-            </a>
-          </li>
+
           <li class="dropdown-footer gap-2">
             <a class="btn btn-error btn-soft btn-block" href="#">
               <span class="icon-[tabler--logout]"></span>

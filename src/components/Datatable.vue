@@ -28,8 +28,9 @@
           <th>
             <input
               type="checkbox"
-              class="checkbox checkbox-primary checkbox-sm"
+              class="select-unselect-all checkbox checkbox-primary checkbox-sm"
               aria-label="product"
+              @click="handleSelectUnselectAll"
             />
           </th>
           <th v-for="header in headers">{{ header.label }}</th>
@@ -146,5 +147,12 @@ function handleViewRecord(event) {
   pdfServerURL.value = pdfURL;
 
   VIEW_MODAl_DOM.value.toggleModal();
+}
+
+function handleSelectUnselectAll(event) {
+  const checkboxes = document.querySelectorAll(".checkbox-primary");
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = event.target.checked;
+  });
 }
 </script>

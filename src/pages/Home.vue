@@ -1,9 +1,7 @@
 <template>
-  <div class="flex max-sm:flex-col gap-4 items-center justify-center h-full">
-    <ReportDatatable />
-  </div>
+  <LinearChart />
 </template>
 
 <script setup>
-  import ReportDatatable from '../views/ReportDatatable.vue';
+import LinearChart from "../components/LinearChart.vue";
 </script>

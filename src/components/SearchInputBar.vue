@@ -27,7 +27,7 @@
           :data-name="item.name"
           v-on:click="handleSelectDropdown"
           v-for="item in items"
-          class="dropdown-item"
+          class="dropdown-item cursor-pointer hover:text-purple-500"
         >
           {{ item.name }}
         </div>
