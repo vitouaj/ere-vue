@@ -1,93 +1,80 @@
 <template>
-  <div class="grid grid-cols-4 gap-4 p-4">
-    <Card
-      class="col-spans-1"
-      v-for="month in months"
-      :id="month.id"
-      :title="month.name"
-      :status="month.status"
-      :className="month.className"
-      :key="month.id"
+  <template v-if="showReportDetail">
+    <ReportDetails
+      @goback="toggleShowReportDetail"
+      :selectedReport="selectedReport"
     />
-  </div>
+  </template>
+  <template v-else="showReportDetail">
+    <div class="grid grid-cols-4 gap-4 p-4">
+      <Card
+        v-for="month in fullMonthReports"
+        :data-id="month.id"
+        @select="handleShowReportDetail"
+        class="col-spans-1"
+        :id="month.id"
+        :title="month.name"
+        :status="month.status"
+        :className="month.className"
+        :key="month.id"
+        :report="month.report"
+      />
+    </div>
+  </template>
 </template>
 
 <script setup>
-import Accordion from "../components/Accordion.vue";
+import { computed, onMounted } from "vue";
 import Card from "../components/Card.vue";
+import ReportDetails from "./ReportDetails.vue";
+import { ref } from "vue";
+const props = defineProps({
+  reports: {
+    type: Array,
+    default: () => [],
+  },
+});
 
-const months = [
-  {
-    id: 1,
-    name: "January",
-    status: "Pending",
-    className: "btn btn-primary",
-  },
-  {
-    id: 2,
-    name: "February",
-    status: "Pending",
-    className: "btn btn-primary",
-  },
-  {
-    id: 3,
-    name: "March",
-    status: "Pending",
-    className: "btn btn-primary",
-  },
-  {
-    id: 4,
-    name: "April",
-    status: "Pending",
-    className: "btn btn-primary",
-  },
-  {
-    id: 5,
-    name: "May",
-    status: "Pending",
-    className: "btn btn-primary",
-  },
-  {
-    id: 6,
-    name: "June",
-    status: "Pending",
-    className: "btn btn-primary",
-  },
-  {
-    id: 7,
-    name: "July",
-    status: "Pending",
-    className: "btn btn-primary",
-  },
-  {
-    id: 8,
-    name: "August",
-    status: "Pending",
-    className: "btn btn-primary",
-  },
-  {
-    id: 9,
-    name: "September",
-    status: "Pending",
-    className: "btn btn-primary",
-  },
-  {
-    id: 10,
-    name: "October",
-    status: "Pending",
-    className: "btn btn-primary",
-  },
-  {
-    id: 11,
-    name: "November",
-    status: "Pending",
-    className: "btn btn-primary",
-  },
-  {
-    id: 12,
-    name: "December",
-    status: "Pending",
-    className: "btn btn-primary",
-  },
-];
+const showReportDetail = ref(false);
+const selectedReport = ref({});
+
+function toggleShowReportDetail() {
+  showReportDetail.value = !showReportDetail.value;
+}
+
+function handleShowReportDetail(monthId) {
+  console.log(monthId);
+  selectedReport.value = fullMonthReports.value.find((r) => r.id === monthId);
+  toggleShowReportDetail();
+}
+
+const fullMonthReports = computed(() => {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  return monthNames.map((name, index) => {
+    const id = String(index + 1);
+    const report = props.reports.find((r) => String(r.monthId) === id) || {};
+
+    return {
+      id,
+      name,
+      status: report.status || "Pending",
+      className: "btn btn-primary",
+      report,
+    };
+  });
+});
 </script>

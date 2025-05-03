@@ -1,5 +1,5 @@
 <template>
-  <a href="/reports/{{id}}">
+  <a @click="$emit('select', id)">
     <div class="card sm:max-w-sm">
       <div class="card-body">
         <h5 class="card-title mb-2.5">{{ title }}</h5>
@@ -34,6 +34,10 @@ const props = defineProps({
   status: {
     type: String,
     default: "",
+  },
+  report: {
+    type: Object,
+    default: {},
   },
 });
 

@@ -7,6 +7,7 @@ import CourseEnrollments from "../pages/CourseEnrollments.vue";
 import ReportDetails from "../pages/ReportDetails.vue";
 import Profile from "../pages/Profile.vue";
 import Login from "../pages/Login.vue";
+import NotFound from "../pages/NotFound.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,6 +46,16 @@ const router = createRouter({
       path: "/me",
       name: "me",
       component: Profile,
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: Login,
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "NotFound",
+      component: NotFound,
     },
   ],
 });

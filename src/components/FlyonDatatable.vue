@@ -1,3 +1,17 @@
+<template>
+  <div>
+    <template v-if="data">
+      <DataTable
+        class="display"
+        :columns="columns"
+        :data="data"
+        :options="{ select: true }"
+        ref="table"
+      />
+    </template>
+  </div>
+</template>
+
 <script setup lang="js">
 import { ref, onMounted } from "vue";
 
@@ -7,37 +21,41 @@ import "datatables.net-select";
 
 DataTable.use(DataTablesLib);
 
+const props = defineProps({
+  enrollments: {
+    type: Array,
+    default: () => [],
+  },
+});
+
 let counter = 0;
 let dt;
 const data = ref([]);
 const table = ref();
 const columns = [
-  {
-    data: "subject",
-    title: "Subject",
-  },
-  {
-    data: "course",
-    title: "Course",
-  },
-  {
-    data: "score",
-    title: "Score",
-  },
-  {
-    data: "grade",
-    title: "Grade",
-  },
+  { data: "teacherName", title: "Subject" }, // Maps to subject (teacher)
+  { data: "courseName", title: "Course" }, // Maps to course
+  { data: "enrollmentDate", title: "Enrollment Date" },
+  { data: "completionDate", title: "Completion Date" },
+  { data: "studentName", title: "Student Name" },
+  { data: "studentEmail", title: "Student Email" },
 ];
 
-// Initial data
-for (let i = 0; i < 5; i++) {
-  add();
-}
+// // Initial data
+// for (let i = 0; i < 5; i++) {
+//   add();
+// }
 
 // Get a DataTables API reference
 onMounted(function () {
   dt = table.value.dt;
+  data.value = props.enrollments.map((item) => ({
+    ...item,
+    enrollmentDate: new Date(item.enrollmentDate).toLocaleDateString(),
+    completionDate: item.completionDate
+      ? new Date(item.completionDate).toLocaleDateString()
+      : "In Progress",
+  }));
 });
 
 // Add new rows - note how the data object in Vue is changed and the DataTable will reflect
@@ -72,18 +90,6 @@ function remove() {
   });
 }
 </script>
-
-<template>
-  <div>
-    <DataTable
-      class="display"
-      :columns="columns"
-      :data="data"
-      :options="{ select: true }"
-      ref="table"
-    />
-  </div>
-</template>
 
 <style>
 @import "datatables.net-dt";

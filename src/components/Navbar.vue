@@ -196,20 +196,38 @@
             </div>
           </li>
           <li>
-            <a class="dropdown-item" href="/me">
+            <div class="dropdown-item" @click="goTo" data-cmp="me">
               <span class="icon-[tabler--user]"></span>
               My Profile
-            </a>
+            </div>
           </li>
 
           <li class="dropdown-footer gap-2">
-            <a class="btn btn-error btn-soft btn-block" href="#">
+            <div @click="logout" class="btn btn-error btn-soft btn-block">
               <span class="icon-[tabler--logout]"></span>
               Sign out
-            </a>
+            </div>
           </li>
         </ul>
       </div>
     </div>
   </nav>
 </template>
+
+<script setup lang="ts">
+import { logout } from "../api/controllers";
+
+const emit = defineEmits(["goto"]);
+
+const goTo = (event: MouseEvent) => {
+  const target = event.currentTarget as HTMLElement;
+  const cmp = target.dataset.cmp;
+  if (cmp) {
+    emit("goto", {
+      detail: {
+        cmpName: cmp,
+      },
+    }); // ✅ Use Vue's emit, not dispatchEvent
+  }
+};
+</script>
