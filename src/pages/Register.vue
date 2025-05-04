@@ -28,7 +28,7 @@
         </template>
         <template v-if="isStep2">
           <h1 class="text-2xl py-4 font-bold text-gray-900">Contacts</h1>
-          <ContactForm :contactModel="registerModel" />
+          <ContactForm :contactModel="contactModel" />
           <div class="flex justify-between">
             <button
               @click.stop.prevent="goToStep(1)"
@@ -51,9 +51,10 @@
 
 <script setup lang="ts">
 import { ref, PropType, onMounted } from "vue";
-import { RegisterModel } from "./Auth.vue";
+import { ContactModel, RegisterModel } from "./Auth.vue";
 import ContactForm from "./ContactForm.vue";
 import UserRegisterForm from "./UserRegisterForm.vue";
+import { register } from "../api/controllers";
 
 const props = defineProps({
   registerModel: {
@@ -67,6 +68,7 @@ const emit = defineEmits();
 const isStep1 = ref(true);
 const isStep2 = ref(false);
 const registerModel = ref<RegisterModel>();
+const contactModel = ref<ContactModel>();
 
 function goToStep(step: Number) {
   isStep1.value = false;
@@ -80,11 +82,23 @@ function goToStep(step: Number) {
 
 onMounted(() => {
   registerModel.value = props.registerModel;
+  contactModel.value = registerModel.value.contacts[0];
 });
 
 function handleNextStep() {
-  goToStep(2);
+  if (registerModel.value?.role != 2) {
+    return goToStep(2);
+  }
+  handleSubmit();
 }
 
-function handleSubmit() {}
+async function handleSubmit() {
+  if (registerModel.value) {
+    console.log(registerModel.value);
+    let result = await register(registerModel.value);
+    if (result?.success) {
+      return emit("toggleSignin");
+    }
+  }
+}
 </script>

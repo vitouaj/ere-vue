@@ -1,18 +1,25 @@
 <script setup lang="ts">
-import { defineEmits } from "vue";
+import { defineEmits, computed } from "vue";
 
 const emit = defineEmits(["goback"]);
 
 const props = defineProps({
   selectedReport: {
     type: Object,
-    default: () => {},
   },
+});
+
+const greenStatus = ["FEEDBACK_RECIEVED", "READY"];
+
+const conputedStatusStyle = computed(() => {
+  if (greenStatus.includes(props.selectedReport?.report?.status)) {
+    return "text-green-500 text-sm p-1 rounded bg-green-300";
+  }
 });
 </script>
 
 <template>
-  <template v-if="selectedReport">
+  <template v-if="selectedReport?.status !== 'N/A'">
     <span
       @click="emit('goback')"
       class="icon-[tabler--arrow-back-up] size-8"
@@ -25,9 +32,11 @@ const props = defineProps({
         <p class="text-gray-600">
           Student Name: {{ selectedReport?.report?.studentName }}
         </p>
-        <p class="text-gray-600">
-          Report Status: {{ selectedReport?.report?.status }}
-        </p>
+        <div class="card-actions">
+          <div :class="conputedStatusStyle">
+            {{ selectedReport?.report?.status.toLocaleLowerCase() }}
+          </div>
+        </div>
       </div>
       <div class="col-span-2 text-right">
         <p class="text-xl font-bold">Student Information</p>
@@ -85,6 +94,16 @@ const props = defineProps({
           </p>
         </div>
       </div>
+    </div>
+  </template>
+  <template v-else>
+    <span
+      @click="emit('goback')"
+      class="icon-[tabler--arrow-back-up] size-8"
+    ></span>
+
+    <div class="grid grid-cols-4 gap-4 p-10">
+      <div class="col-span-4 mx-auto">Report is not ready</div>
     </div>
   </template>
 </template>

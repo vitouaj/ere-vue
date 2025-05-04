@@ -64,15 +64,23 @@ const fullMonthReports = computed(() => {
     "December",
   ];
 
+  let allreports = props.reports;
+
   return monthNames.map((name, index) => {
     const id = String(index + 1);
-    const report = props.reports.find((r) => String(r.monthId) === id) || {};
+    const report = allreports.find((r) => String(r.monthId) === id);
+    let className = "card cursor-pointer gray-out";
+    let status = "N/A";
+    if (report) {
+      className = "card cursor-pointer";
+      status = report.status;
+    }
 
     return {
       id,
       name,
-      status: report.status || "Pending",
-      className: "btn btn-primary",
+      status: status,
+      className: className,
       report,
     };
   });

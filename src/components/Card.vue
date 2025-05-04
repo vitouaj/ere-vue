@@ -1,19 +1,23 @@
 <template>
   <a @click="$emit('select', id)">
-    <div class="card sm:max-w-sm">
+    <div :class="className">
       <div class="card-body">
-        <h5 class="card-title mb-2.5">{{ title }}</h5>
+        <h5 class="text-xl font-bold">{{ title }}</h5>
         <p class="mb-4">
           {{ content }}
         </p>
         <div class="card-actions">
-          <button :class="buttonClassName">{{ status }}</button>
+          <div :class="conputedStatusStyle">
+            {{ status.toLocaleLowerCase() }}
+          </div>
         </div>
       </div>
     </div>
   </a>
 </template>
 <script setup lang="js">
+import { computed } from "vue";
+
 const props = defineProps({
   id: {
     type: String,
@@ -41,13 +45,11 @@ const props = defineProps({
   },
 });
 
-const buttonClassName = () => {
-  return props.status === "Pending"
-    ? "btn btn-primary"
-    : props.status === "Completed"
-      ? "btn btn-success"
-      : props.status === "Failed"
-        ? "btn btn-danger"
-        : "btn btn-secondary";
-};
+const greenStatus = ["FEEDBACK_RECIEVED", "READY"];
+
+const conputedStatusStyle = computed(() => {
+  if (greenStatus.includes(props.status)) {
+    return "text-green-500 text-sm p-1 rounded bg-green-300";
+  }
+});
 </script>

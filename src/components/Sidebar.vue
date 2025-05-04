@@ -1,34 +1,70 @@
 <template>
-  <ul class="menu">
-    <li>
-      <div @click="goTo" data-cmp="home">
-        <span class="icon-[tabler--home] size-5"></span>
-        Home
-      </div>
-    </li>
-    <li>
-      <div @click="goTo" data-cmp="schedules">
-        <span class="icon-[tabler--calendar] size-5"></span>
-        Schedules
-      </div>
-    </li>
-    <!-- <li>
-      <div @click="goTo" data-cmp="allreports">
-        <span class="icon-[tabler--report] size-5"></span>
-        All Reports (For students)
-      </div>
-    </li> -->
-    <li>
-      <div @click="goTo" data-cmp="course-enrollments">
-        <span class="icon-[tabler--report] size-5"></span>
-        Course Enrollments (For teacher)
-      </div>
-    </li>
-  </ul>
+  <template v-if="user.role == 'STUDENT'">
+    <ul class="menu">
+      <li>
+        <div @click="goTo" data-cmp="home">
+          <span class="icon-[tabler--home] size-5"></span>
+          Home
+        </div>
+      </li>
+      <li>
+        <div @click="goTo" data-cmp="schedules">
+          <span class="icon-[tabler--calendar] size-5"></span>
+          Schedules
+        </div>
+      </li>
+      <li>
+        <div @click="goTo" data-cmp="course-enrollments">
+          <span class="icon-[tabler--report] size-5"></span>
+          Course Enrollments (For student)
+        </div>
+      </li>
+    </ul>
+  </template>
+  <template v-if="user.role == 'TEACHER'">
+    <ul class="menu">
+      <li>
+        <div @click="goTo" data-cmp="home">
+          <span class="icon-[tabler--home] size-5"></span>
+          Home
+        </div>
+      </li>
+      <li>
+        <div @click="goTo" data-cmp="schedules">
+          <span class="icon-[tabler--calendar] size-5"></span>
+          Schedules
+        </div>
+      </li>
+      <li>
+        <div @click="goTo" data-cmp="course-enrollments">
+          <span class="icon-[tabler--report] size-5"></span>
+          Course Enrollments (For teacher)
+        </div>
+      </li>
+    </ul>
+  </template>
+  <template v-if="user.role == 'PARENT'">
+    <ul class="menu">
+      <li>
+        <div @click="goTo" data-cmp="studentlist">
+          <span class="icon-[tabler--home] size-5"></span>
+          Home
+        </div>
+      </li>
+    </ul>
+  </template>
 </template>
 
 <script setup lang="ts">
-import { defineEmits } from "vue";
+import { defineEmits, PropType } from "vue";
+import { User } from "../pages/Home.vue";
+
+const props = defineProps({
+  user: {
+    type: Object as PropType<User>,
+    required: true,
+  },
+});
 
 const emit = defineEmits(["goto"]);
 

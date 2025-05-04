@@ -5,20 +5,20 @@ import Register from "./Register.vue";
 import { ref } from "vue";
 
 export interface RegisterModel {
-  firstname: String;
-  lastname: String;
+  firstName: String;
+  lastName: String;
   password: String;
   email: String;
   phone: String;
   role: Number;
   subject?: Number;
-  level?: Number;
+  levelId?: Number;
   contacts: Array<ContactModel>;
 }
 
 export interface ContactModel {
-  firstname: String;
-  lastname: String;
+  firstName: String;
+  lastName: String;
   email: String;
   phone: String;
   homeNumber: String;
@@ -30,16 +30,18 @@ export interface ContactModel {
 }
 
 const registerModel = ref<RegisterModel>({
-  firstname: "",
-  lastname: "",
+  firstName: "",
+  lastName: "",
   password: "",
   email: "",
   phone: "",
   role: 0, // or any default role number
+  subject: 0,
+  levelId: 0,
   contacts: [
     {
-      firstname: "",
-      lastname: "",
+      firstName: "",
+      lastName: "",
       email: "",
       phone: "",
       homeNumber: "",

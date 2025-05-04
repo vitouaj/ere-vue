@@ -1,4 +1,4 @@
-import { start } from "repl";
+import { Notyf } from "notyf";
 
 class DateTimeUtility {
   private static today = Date.now();
@@ -65,4 +65,26 @@ class DateTimeUtility {
   }
 }
 
-export { DateTimeUtility };
+function notify(option: NotifyOption) {
+  const notyfDefault = new Notyf({
+    position: {
+      x: "center",
+      y: "top",
+    },
+  });
+  notyfDefault.open({
+    className: option.type || "type-error",
+    message: option.message,
+    duration: option.duration || 3000,
+    ripple: true,
+    dismissible: true,
+  });
+}
+
+interface NotifyOption {
+  type?: string;
+  message: string;
+  duration?: number;
+}
+
+export { DateTimeUtility, notify };

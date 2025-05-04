@@ -1,24 +1,35 @@
 <template>
-  <Navbar @goto="handleGoTo" />
+  <Navbar :user="user || ({} as User)" @goto="handleGoTo" />
   <div class="grid grid-cols-5 gap-4 p-4">
-    <Sidebar @goto="handleGoTo" class="col-span-1" />
+    <Sidebar
+      :user="user || ({} as User)"
+      @goto="handleGoTo"
+      class="col-span-1"
+    />
     <div class="main-content-container col-span-4">
       <div class="card w-full">
         <div class="card-body content">
           <template v-if="showAllReports">
-            <AllReports
-              v-if="computedReports.length > 0"
-              :reports="mainReports"
-            />
+            <AllReports v-if="mainReports" :reports="mainReports" />
+          </template>
+          <template v-if="showStudentList">
+            <div class="grid grid-cols-2">
+              <StudentCard
+                @gotostudentreportlist="fiterMainReports"
+                v-if="students"
+                v-for="student in students"
+                :student="student"
+              />
+            </div>
           </template>
           <template v-if="showSchedules">
-            <Calendar v-if="courses.length > 0" :courses="computedCourses" />
+            <Calendar v-if="courses" :courses="computedCourses" />
           </template>
           <template v-if="showCourseEnrollments">
             <CourseEnrollments :enrollments="enrollments" />
           </template>
           <template v-if="showProfile">
-            <Profile :user="user" @goback="handleGoTo" />
+            <Profile :contacts="contacts" :user="user" @goback="handleGoTo" />
           </template>
         </div>
       </div>
@@ -35,33 +46,46 @@ import AllReports from "./AllReports.vue";
 import Calendar from "./Calendar.vue";
 import CourseEnrollments from "./CourseEnrollments.vue";
 import Profile from "./Profile.vue";
+import StudentCard from "./StudentCard.vue";
 
 export interface User {
-  name: String;
-  phone: String;
-  email: String;
-  role: String;
-  levelId: String;
-  userId: String;
-  studentId: String;
-  createdDate: String;
-  updatedDate: String;
+  name: string;
+  phone: string;
+  email: string;
+  role: string;
+  subject: string;
+  levelId: string;
+  userId: string;
+  studentId: string;
+  createdDate: string;
+  updatedDate: string;
   totalAbsence: Number;
   totalScore: Number;
-  overallGrade: String;
+  overallGrade: string;
   averageScore: Number;
 }
 
-const showAllReports = ref(true);
+const showAllReports = ref(false);
 const showCourseEnrollments = ref(false);
 const showSchedules = ref(false);
 const showProfile = ref(false);
+const showStudentList = ref(false);
 
 function resetViews() {
   showAllReports.value = false;
   showCourseEnrollments.value = false;
   showSchedules.value = false;
   showProfile.value = false;
+  showStudentList.value = false;
+}
+
+function fiterMainReports(event: CustomEvent) {
+  const id = event.detail?.id;
+  let reports = mainReportMap.value[id] || [];
+  // set mainreports
+  mainReports.value = reports;
+  showAllReports.value = true;
+  showStudentList.value = false;
 }
 
 function handleGoTo(event: CustomEvent) {
@@ -72,6 +96,9 @@ function handleGoTo(event: CustomEvent) {
     case "home":
     case "allreports":
       showAllReports.value = true;
+      break;
+    case "studentlist":
+      showStudentList.value = true;
       break;
     case "schedules":
       showSchedules.value = true;
@@ -91,9 +118,12 @@ interface Report {
   status?: string;
 }
 
+const mainReportMap = ref({});
 const mainReports = ref<Report[]>([]);
 const enrollments = ref([]);
 const courses = ref([]);
+const contacts = ref([]);
+const students = ref([]);
 
 const computedCourses = computed(() => {
   return [...courses.value];
@@ -116,8 +146,16 @@ onMounted(async () => {
   let response = await getUser();
   let payload = response?.payload;
   user.value = payload?.user;
+  if (user.value?.role == "PARENT" || user.value?.role == "TEACHER") {
+    students.value = payload?.students;
+    showStudentList.value = true;
+  } else {
+    showAllReports.value = true;
+  }
+  contacts.value = payload?.contacts;
   courses.value = payload?.courses;
   mainReports.value = payload?.mainReport;
   enrollments.value = payload?.enrollments;
+  mainReportMap.value = payload?.mainReportMap;
 });
 </script>

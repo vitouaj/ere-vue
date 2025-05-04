@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+import { notify } from "./utility";
 const ERE_API_DOMAIN = "http://localhost:5137";
 
 type Method = "GET" | "POST" | "PATCH" | "DELETE";
@@ -36,22 +37,15 @@ class HttpClient {
       return await axios(config);
     } catch (error) {
       HttpClient.handleError(error);
-      throw error; // rethrow or replace with a custom error
     }
   }
 
   private static handleError(error: unknown): void {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
-
-      console.error("HTTP Error:", {
-        message: axiosError.message,
-        status: axiosError.response?.status,
-        data: axiosError.response?.data,
-        config: axiosError.config,
+      notify({
+        message: `${axiosError.message}: ${axiosError.response?.data?.message}`,
       });
-    } else {
-      console.error("Unknown Error:", error);
     }
   }
 

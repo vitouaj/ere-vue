@@ -9,8 +9,8 @@
           type="text"
           name="firstname"
           id="firstname"
-          v-model="registerModel.firstname"
-          class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          v-model="registerModel.firstName"
+          class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="firstname"
           required
         />
@@ -22,9 +22,9 @@
         <input
           type="text"
           name="lastname"
-          v-model="registerModel.lastname"
+          v-model="registerModel.lastName"
           id="lastname"
-          class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="lastname"
           required
         />
@@ -38,8 +38,20 @@
         name="email"
         v-model="registerModel.email"
         id="email"
-        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="name@company.com"
+        required
+      />
+    </div>
+    <div>
+      <label for="phone" class="block mb-2 text-sm font-medium">Phone</label>
+      <input
+        type="text"
+        name="phone"
+        v-model="registerModel.phone"
+        id="phone"
+        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="01992121"
         required
       />
     </div>
@@ -53,38 +65,69 @@
         name="password"
         id="password"
         placeholder="••••••••"
-        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       />
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div class="col-span-1">
-        <label for="countries" class="block mb-2 text-sm font-medium"
+        <label for="roles" class="block mb-2 text-sm font-medium"
           >Are you a student or teacher?</label
         >
         <select
           v-model="registerModel.role"
           required="true"
-          id="countries"
+          id="roles"
           class="bg-gray-50 required border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
         >
           <option selected>Choose a role</option>
-          <option value="1">Student</option>
-          <option value="2">Teacher</option>
+          <template v-if="roleOptions">
+            <option v-for="option in roleOptions" :value="option.id">
+              {{ option.name }}
+            </option>
+          </template>
         </select>
       </div>
-      <div class="col-span-1">
-        <label for="phone" class="block mb-2 text-sm font-medium">Phone</label>
-        <input
-          type="number"
-          name="phone"
-          v-model="registerModel.phone"
-          id="phone"
-          class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="01992121"
-          required
-        />
-      </div>
+      <template v-if="registerModel.role == 2">
+        <div class="col-span-1">
+          <label for="subjects" class="block mb-2 text-sm font-medium"
+            >What subject do you teach?</label
+          >
+          <select
+            v-model="registerModel.subject"
+            required="true"
+            id="subjects"
+            class="bg-gray-50 required border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          >
+            <option selected>Choose a subject</option>
+            <template v-if="subjectOptions">
+              <option v-for="option in subjectOptions" :value="option.id">
+                {{ option.name }}
+              </option>
+            </template>
+          </select>
+        </div>
+      </template>
+      <template v-if="registerModel.role == 1">
+        <div class="col-span-1">
+          <label for="level" class="block mb-2 text-sm font-medium"
+            >Which level are you?</label
+          >
+          <select
+            v-model="registerModel.levelId"
+            required="true"
+            id="level"
+            class="bg-gray-50 required border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          >
+            <option selected>Choose a level</option>
+            <template v-if="levelOptions">
+              <option v-for="option in levelOptions" :value="option.id">
+                {{ option.name }}
+              </option>
+            </template>
+          </select>
+        </div>
+      </template>
     </div>
 
     <div class="flex items-center justify-between">
@@ -117,8 +160,23 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  registerModel: any;
+import { onMounted, ref } from "vue";
+import { loadSubjectOptions } from "../api/controllers";
+import { RegisterModel } from "./Auth.vue";
+
+const props = defineProps<{
+  registerModel: RegisterModel;
   handleNextStep: any;
 }>();
+
+const subjectOptions = ref<{ id: number; name: string }[]>([]);
+const roleOptions = ref<{ id: number; name: string }[]>([]);
+const levelOptions = ref<{ id: number; name: string }[]>([]);
+
+onMounted(async () => {
+  let options = await loadSubjectOptions();
+  subjectOptions.value = options?.payload?.subjectOptions;
+  roleOptions.value = options?.payload?.roleOptions;
+  levelOptions.value = options?.payload?.levelOptions;
+});
 </script>

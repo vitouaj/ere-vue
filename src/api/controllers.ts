@@ -1,5 +1,18 @@
 import HttpClient from "./httpRequests";
 import router from "../router";
+import { RegisterModel } from "../pages/Auth.vue";
+import { notify } from "./utility";
+
+interface loginPayload {
+  emailOrPhoneNumber: String;
+  password: String;
+  token?: String;
+  deviceId?: String;
+  deviceName?: String;
+  deviceType?: String;
+  deviceOs?: String;
+  ipAddress?: String;
+}
 
 let toasterMessage = "";
 
@@ -12,23 +25,43 @@ async function getUser() {
     let data = response?.data;
     let success = data?.success;
     toasterMessage = data?.message;
+    toasterMessage = data?.message;
+    if (success) {
+      notify({
+        type: "type-success",
+        message: toasterMessage,
+      });
+    }
     return data;
   } catch (e) {
     let errorPayload = e?.response?.data;
     toasterMessage = errorPayload?.message;
-    router.push({ name: "login" });
+    router.push({ name: "auth" });
   }
 }
 
-interface loginPayload {
-  emailOrPhoneNumber: String;
-  password: String;
-  token?: String;
-  deviceId?: String;
-  deviceName?: String;
-  deviceType?: String;
-  deviceOs?: String;
-  ipAddress?: String;
+async function loadSubjectOptions() {
+  try {
+    const response = await HttpClient.get({
+      path: "/api/v1.0/user/static-options",
+    });
+    console.log(response);
+    let data = response?.data;
+    let success = data?.success;
+
+    toasterMessage = data?.message;
+    if (success) {
+      // notify({
+      //   type: "type-success",
+      //   message: toasterMessage,
+      // });
+    }
+    return data;
+  } catch (e) {
+    let errorPayload = e?.response?.data;
+    toasterMessage = errorPayload?.message;
+    router.push({ name: "auth" });
+  }
 }
 
 async function login(payload: loginPayload) {
@@ -52,9 +85,31 @@ async function login(payload: loginPayload) {
   }
 }
 
-async function logout() {
-  window.sessionStorage.removeItem("ere-token");
-  router.push({ name: "login" });
+async function register(payload: RegisterModel) {
+  try {
+    const response = await HttpClient.post({
+      path: "/api/v1.0/user/register",
+      payload: payload,
+    });
+    let data = response?.data;
+    let success = data?.success;
+    toasterMessage = data?.message;
+    if (success) {
+      notify({
+        type: "type-success",
+        message: toasterMessage,
+      });
+      return data;
+    }
+  } catch (e) {
+    let errorPayload = e?.response?.data;
+    toasterMessage = errorPayload?.message;
+  }
 }
 
-export { getUser, login, logout };
+async function logout() {
+  window.sessionStorage.removeItem("ere-token");
+  router.push({ name: "auth" });
+}
+
+export { getUser, login, logout, loadSubjectOptions, register };
