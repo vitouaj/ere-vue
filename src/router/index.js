@@ -8,49 +8,15 @@ import ReportDetails from "../pages/ReportDetails.vue";
 import Profile from "../pages/Profile.vue";
 import Login from "../pages/Login.vue";
 import NotFound from "../pages/NotFound.vue";
+import Auth from "../pages/Auth.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/",
-      name: "home",
-      component: HomeView,
-    },
-    {
-      path: "/reports",
-      name: "reports",
-      component: ReportView,
-    },
-    {
-      path: "/allreports",
-      name: "allreports",
-      component: AllReports,
-    },
-    {
-      path: "/schedules",
-      name: "schedules",
-      component: Schedules,
-    },
-    {
-      path: "/course-enrollments",
-      name: "course-enrollments",
-      component: CourseEnrollments,
-    },
-    {
-      path: "/reports/:id",
-      name: "reports/:id",
-      component: ReportDetails,
-    },
-    {
-      path: "/me",
-      name: "me",
-      component: Profile,
-    },
-    {
-      path: "/login",
-      name: "login",
-      component: Login,
+      path: "/auth",
+      name: "auth",
+      component: Auth,
     },
     {
       path: "/:pathMatch(.*)*",

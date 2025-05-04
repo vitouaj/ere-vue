@@ -44,7 +44,7 @@ async function login(payload: loginPayload) {
       let token = data?.payload?.token;
       window.sessionStorage.setItem("ere-token", token);
       // redirect to home
-      router.push({ name: "home" });
+      return router.push({ name: "home" });
     }
   } catch (e) {
     let errorPayload = e?.response?.data;
