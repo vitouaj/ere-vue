@@ -13,6 +13,7 @@
             <AllReports v-if="mainReports" :reports="mainReports" />
           </template>
           <template v-if="showStudentList">
+            {{ user?.role }}
             <div class="grid grid-cols-2">
               <StudentCard
                 @gotostudentreportlist="fiterMainReports"
@@ -26,6 +27,7 @@
             <Calendar v-if="courses" :courses="computedCourses" />
           </template>
           <template v-if="showCourseEnrollments">
+            <CourseList v-if="courses" :courses="courses" />
             <CourseEnrollments :enrollments="enrollments" />
           </template>
           <template v-if="showProfile">
@@ -47,12 +49,13 @@ import Calendar from "./Calendar.vue";
 import CourseEnrollments from "./CourseEnrollments.vue";
 import Profile from "./Profile.vue";
 import StudentCard from "./StudentCard.vue";
+import CourseList from "./CourseList.vue";
 
 export interface User {
   name: string;
   phone: string;
   email: string;
-  role: string;
+  role: Number;
   subject: string;
   levelId: string;
   userId: string;
@@ -113,13 +116,8 @@ function handleGoTo(event: CustomEvent) {
 }
 
 const user = ref<User>();
-interface Report {
-  monthId: number;
-  status?: string;
-}
-
 const mainReportMap = ref({});
-const mainReports = ref<Report[]>([]);
+const mainReports = ref([]);
 const enrollments = ref([]);
 const courses = ref([]);
 const contacts = ref([]);
@@ -144,9 +142,11 @@ const computedReports = computed(() => {
 
 onMounted(async () => {
   let response = await getUser();
+
   let payload = response?.payload;
   user.value = payload?.user;
-  if (user.value?.role == "PARENT" || user.value?.role == "TEACHER") {
+
+  if (user.value?.role === 3 || user.value?.role === 2) {
     students.value = payload?.students;
     showStudentList.value = true;
   } else {

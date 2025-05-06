@@ -65,6 +65,12 @@ class DateTimeUtility {
   }
 }
 
+const ROLE_MAPPER = {
+  1: "Student",
+  2: "Teacher",
+  3: "Parent",
+};
+
 function notify(option: NotifyOption) {
   const notyfDefault = new Notyf({
     position: {
@@ -87,4 +93,4 @@ interface NotifyOption {
   duration?: number;
 }
 
-export { DateTimeUtility, notify };
+export { DateTimeUtility, notify, ROLE_MAPPER };

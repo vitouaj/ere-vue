@@ -1,5 +1,5 @@
 <template>
-  <template v-if="user.role == 'STUDENT'">
+  <template v-if="user.role == 1">
     <ul class="menu">
       <li>
         <div @click="goTo" data-cmp="home">
@@ -16,12 +16,12 @@
       <li>
         <div @click="goTo" data-cmp="course-enrollments">
           <span class="icon-[tabler--report] size-5"></span>
-          Course Enrollments (For student)
+          Courses
         </div>
       </li>
     </ul>
   </template>
-  <template v-if="user.role == 'TEACHER'">
+  <template v-if="user.role == 2">
     <ul class="menu">
       <li>
         <div @click="goTo" data-cmp="home">
@@ -43,7 +43,8 @@
       </li>
     </ul>
   </template>
-  <template v-if="user.role == 'PARENT'">
+  <template v-if="user.role == 3">
+    {{ user.role }}
     <ul class="menu">
       <li>
         <div @click="goTo" data-cmp="studentlist">

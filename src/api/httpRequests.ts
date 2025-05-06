@@ -43,6 +43,10 @@ class HttpClient {
   private static handleError(error: unknown): void {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 401) {
+        window.location.href = "/auth"; // redirect to login page
+        return;
+      }
       notify({
         message: `${axiosError.message}: ${axiosError.response?.data?.message}`,
       });
